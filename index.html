@@ -1,49 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <title>Routing</title>
-    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-    <link rel="stylesheet" type="text/css" href="https://js.cit.api.here.com/v3/3.0/mapsjs-ui.css?dp-version=1526040296" />
-    <script src="http://js.api.here.com/v3/3.0/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
-    <script src="http://js.api.here.com/v3/3.0/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
-    <!-- for interactive map  -->
-    <script src="http://js.api.here.com/v3/3.0/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
-    <!-- for StreetLevel -->
-    <script src="http://js.api.here.com/v3/3.0/mapsjs-pano.js" type="text/javascript" charset="utf-8"></script>
-    <script type="text/javascript" src="https://js.cit.api.here.com/v3/3.0/mapsjs-ui.js"></script>
+    <meta name="viewport" content="initial-scale=1.0,
+    width=device-width" />
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-core-legacy.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-service-legacy.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
 </head>
 
 <body>
-    <div id='maps' style="width: 100%;height:600px"></div>
-    <script type="text/javascript" charset="utf-8">
+    <div style="width: 100%; height: 700px" id="mapContainer"></div>
+    <script>
+    // Initialize the platform object:
     var platform = new H.service.Platform({
-        //'apikey': 'sLDfVHxehQg0HajZ_i5_mgdwkLsXvYOvEQhJzlVqT3w' 
-        'app_id': 'OpnOeeAkAALSVSlPWcsf',
-        'app_code': '_Bi6G3bqymSbOGwt2YYM2g'
-	//'useHTTPS': true
-
-
+        'apikey': '97jX-h4M8xWR3EQa94nfFzJXXTDJDBUZZMW411JISW4'
     });
 
+    // Obtain the default map types from the platform object
+    var maptypes = platform.createDefaultLayers({ lg: 'CHT' , lg2:'ENG' });
 
-    // Obtain the default map types from the platform object:
-    var defaultLayers = platform.createDefaultLayers({ lg: 'CHT' , lg2:'ENG' });
     // Instantiate (and display) a map object:
     var map = new H.Map(
-        document.getElementById('maps'),
-        /*(定義基本的呈現) default the lays*/
-        defaultLayers.normal.map, {
-            zoom: 16,
-            center: {
-                lat: 25.0339,
-                lng: 121.5647
-            }
+        document.getElementById('mapContainer'),
+        maptypes.vector.normal.map, {
+            zoom: 14,
+            center: { lat: 25.0339, lng: 121.5647 }
         });
 
-    //使地圖能pan / drag ; create the listener for map interactive
+
     // Enable the event system on the map instance:
     var mapEvents = new H.mapevents.MapEvents(map);
+
     // Add event listener:
     map.addEventListener('tap', function(evt) {
         // Log 'tap' and 'mouse' events:
@@ -53,34 +44,77 @@
     // Instantiate the default behavior, providing the mapEvents object: 
     var behavior = new H.mapevents.Behavior(mapEvents);
 
-    // Create the default UI: 
-    var ui = H.ui.UI.createDefault(map, defaultLayers, 'zh-CN');
-    /*
-    //remove the StreetLevel Control in default UI ; 移除UI的物件
-    ui.getControl('panorama').setEnabled(false)
-    */
+
+    // Create the default UI:
+    var ui = H.ui.UI.createDefault(map, maptypes, 'zh-CN');
 
 
 
-    //展示routing 的路線:
-    // Displaying a Route on the Map :
+    // // 'maptypes' variable holds the result of the H.service.Platform#createDefaultLayers call
+    // var mapSettings = new H.ui.MapSettingsControl({
+    //     alignment: 'top-right',
+    //     baseLayers: [{
+    //         label: 'Normal map',
+    //         layer: maptypes.raster.map
+    //     }]
+    // });
+    // ui.addControl('mapsettings', mapSettings);
+
+
+
+    // // Provided that map and platform objects are instantiated.
+    // // Create a traffic service and a corresponding provider.
+    // var service = platform.getTrafficService()
+    // var provider = new H.service.traffic.flow.Provider(service)
+
+    // // Create a tile layer that can be added to the map
+    // var layer = new H.map.layer.TileLayer(provider);
+    // map.addLayer(layer);
+
+
+    // //# Change map style at runtime
+
+    // function changeFeatureStyle(map) {
+    //     // get the vector provider from the base layer
+    //     var provider = map.getBaseLayer().getProvider();
+
+    //     // get the style object for the base layer
+    //     var parkStyle = provider.getStyle();
+
+    //     var changeListener = (evt) => {
+    //         if (parkStyle.getState() === H.map.Style.State.READY) {
+    //             parkStyle.removeEventListener('change', changeListener);
+
+    //             // query the sub-section of the style configuration
+    //             // the call removes the subsection from the original configuration
+    //             var parkConfig = parkStyle.extractConfig(['landuse.park', 'landuse.builtup']);
+    //             // change the color, for the description of the style section
+    //             // see the Developer's guide
+    //             parkConfig.layers.landuse.park.draw.polygons.color = '#FF2400'
+    //             parkConfig.layers.landuse.builtup.draw.polygons.color = '#676d67'
+
+    //             // merge the configuration back to the base layer configuration
+    //             parkStyle.mergeConfig(parkConfig);
+    //         }
+    //     };
+
+    //     parkStyle.addEventListener('change', changeListener);
+    // }
+
+    // changeFeatureStyle(map);
+
     // Create the parameters for the routing request:
     var routingParameters = {
-        // The routing mode: mode=shortest;pedestrian ; mode=fastest;car;traffic:enabled ; mode=fastest;car;traffic:disabled ; fastest;bicycle  ; pedestrian
-        //'mode': 'fastest;car;traffic:enabled;motorway:-3', 'fastest;scooter'
+        // The routing mode:
         'mode': 'fastest;car;traffic:enabled',
-		//https://developer.here.com/documentation/routing/topics/resource-param-type-routing-mode.html#resource-param-type-routing-mode__type-transport-mode
-		
         // The start point of the route:
         'waypoint0': 'geo!stopOver!25.059848986,121.5364359;20;Start',
         // The end point of the route:
         'waypoint1': 'geo!25.0360098,121.5689499651;20;Destination',
-        //'waypoint1': 'geo!24.04978,120.69414',
         // To retrieve the shape of the route we choose the route
         // representation mode 'display'
         'representation': 'display'
     };
-
 
     // Define a callback function to process the routing response:
     var onResult = function(result) {
@@ -110,7 +144,7 @@
 
             // Create a polyline to display the route:
             var routeLine = new H.map.Polyline(linestring, {
-                style: { strokeColor: 'blue', lineWidth: 5 }
+                style: { strokeColor: 'yellow', lineWidth: 5 }
             });
 
             // Create a marker for the start point:
@@ -125,23 +159,13 @@
                 lng: endPoint.longitude
             });
 
-            // Create a polyline to display the route ; 增加箭頭arrow到路徑中表現
-            routeLine = new H.map.Polyline(linestring, {
-                style: { lineWidth: 10 },
-                arrows: { fillColor: 'white', frequency: 2, width: 0.8, length: 0.7 }
-            });
-
             // Add the route polyline and the two markers to the map:
             map.addObjects([routeLine, startMarker, endMarker]);
 
             // Set the map's viewport to make the whole route visible:
-            map.setViewBounds(routeLine.getBounds());
-
-
+            map.getViewModel().setLookAtData({ bounds: routeLine.getBoundingBox() });
         }
-
     };
-
 
     // Get an instance of the routing service:
     var router = platform.getRoutingService();
@@ -153,18 +177,6 @@
         function(error) {
             alert(error.message);
         });
-
-    router.calculateRoute(routingParameters2, onResult2,
-        function(error) {
-            alert(error.message);
-        });
-
-
-
-
-
-
-
     </script>
 </body>
 
