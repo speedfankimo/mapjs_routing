@@ -26,7 +26,7 @@
     // Instantiate (and display) a map object:
     var map = new H.Map(
         document.getElementById('mapContainer'),
-        maptypes.raster.normal.map, {
+        maptypes.raster.normal.base, {
             zoom: 14,
             center: { lat: 25.0339, lng: 121.5647 }
         });
@@ -55,25 +55,25 @@
     */
     //map.setBaseLayer(maptypes.normal.map);
 
-    //set function to request the map tile API to be able change the language or others.  
-    function switchMapLanguage(map, platform) {
-        var mapTileService = platform.getMapTileService({
-                type: 'base'
-            }),
-            // Our layer will load tiles from the HERE Map Tile API
+//     //set function to request the map tile API to be able change the language or others.  
+//     function switchMapLanguage(map, platform) {
+//         var mapTileService = platform.getMapTileService({
+//                 type: 'base'
+//             }),
+//             // Our layer will load tiles from the HERE Map Tile API
 
-            //mapTile type : normal.day, normal.day.grey, normal.day.transit, normal.day.custom, normal.night, normal.night.grey, terrain.day, satellite.day, hybrid.day, pedestrian.day, pedestrian.night, carnav.day.grey, and reduced.day.
-            chineseMapLayer = mapTileService.createTileLayer(
-                'maptile',
-                'normal.day',
-                256,
-                'png8', { lg: 'CHT', lg2: 'ENG', pois: '!F', ppi: '250' }
-                //{ lg: 'CHT', lg2: 'ENG', pois:'123456789101112131415161718192021222324252627282930', ppi:'250'}
-            );
-        map.setBaseLayer(chineseMapLayer);
-    }
-    //call switchMapLanguage() to change the language  }
-    switchMapLanguage(map, platform)
+//             //mapTile type : normal.day, normal.day.grey, normal.day.transit, normal.day.custom, normal.night, normal.night.grey, terrain.day, satellite.day, hybrid.day, pedestrian.day, pedestrian.night, carnav.day.grey, and reduced.day.
+//             chineseMapLayer = mapTileService.createTileLayer(
+//                 'maptile',
+//                 'normal.day',
+//                 256,
+//                 'png8', { lg: 'CHT', lg2: 'ENG', pois: '!F', ppi: '250' }
+//                 //{ lg: 'CHT', lg2: 'ENG', pois:'123456789101112131415161718192021222324252627282930', ppi:'250'}
+//             );
+//         map.setBaseLayer(chineseMapLayer);
+//     }
+//     //call switchMapLanguage() to change the language  }
+//     switchMapLanguage(map, platform)
 
 
 
